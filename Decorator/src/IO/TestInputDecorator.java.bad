@@ -1,0 +1,47 @@
+package IO;
+
+import java.io.*;
+import java.time.Duration;
+import java.time.Instant;
+class myFilterInputStream extends FilterInputStream {
+    public myFilterInputStream(InputStream in){
+        super(in);
+    }
+    /*
+        read() method is overrided for changing all uppercase to lowercase
+    */
+    @Override
+    public int read() throws IOException {
+        int c = 0;
+        c = super.read();
+        c = Character.toLowerCase((char) c);
+        return c;
+    }
+}
+
+public class TestInputDecorator {
+    public static void main(String[] args) throws IOException {
+        /* The FileInputStream base class is wraped by class in its family (BufferedInputStream).
+            Then, these two objects are wraped by our custom class named "myFilterInputStream".
+        */
+        Instant start = Instant.now();
+        InputStream min = new myFilterInputStream(new BufferedInputStream
+                            (new FileInputStream("eec.txt")));
+        int c;
+        try {
+            while ((c = min.read()) != -1) {
+                if(c == 10 || c == 13){ //Ignore newline
+                    continue;
+                }
+                //System.out.print((char)c);
+            }
+        } catch (Exception e) {
+            System.err.println(e);
+        } finally {
+            min.close();
+        }
+        Instant end = Instant.now();
+        Duration timeE = Duration.between(start, end);
+        System.out.println(timeE);
+    }
+}

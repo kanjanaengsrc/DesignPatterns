@@ -1,0 +1,29 @@
+package IO;
+
+import java.io.*;
+import java.time.Duration;
+import java.time.Instant;
+
+public class TestInput {
+    public static void main(String[] args) throws IOException {
+        Instant start = Instant.now();
+        FileInputStream fin = new FileInputStream("eec.txt");
+        int c = 0;
+        try {
+            while ((c = fin.read()) != -1) {
+                if(c == 10 || c == 13){ //Ignore newline
+                    continue;
+                }
+                c = Character.toLowerCase((char) c);
+                //System.out.print((char)c);
+            }
+        } catch (IOException e) {
+            System.err.println(e);
+        } finally {
+            fin.close();
+        }
+        Instant end = Instant.now();
+        Duration timeE = Duration.between(start, end);
+        System.out.println(timeE);
+    }
+}
